@@ -16,7 +16,6 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
 import javafx.scene.control.cell.TreeItemPropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Background;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import entity.Order;
@@ -30,32 +29,33 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class PlaceOrderFormController implements Initializable {
     @FXML
-    private JFXComboBox cmbCustomerId;
+    private JFXComboBox<String> cmbCustomerId;
 
     @FXML
-    private JFXComboBox cmbItemCode;
+    private JFXComboBox<String> cmbItemCode;
 
     @FXML
-    private TreeTableColumn colAmount;
+    private TreeTableColumn<Object, Object> colAmount;
 
     @FXML
-    private TreeTableColumn colDescription;
+    private TreeTableColumn<Object, Object> colDescription;
 
     @FXML
-    private TreeTableColumn colItemCode;
+    private TreeTableColumn<Object, Object> colItemCode;
 
     @FXML
-    private TreeTableColumn colOption;
+    private TreeTableColumn<Object, Object> colOption;
 
     @FXML
-    private TreeTableColumn colQty;
+    private TreeTableColumn<Object, Object> colQty;
 
     @FXML
-    private TreeTableColumn colUnitPrice;
+    private TreeTableColumn<Object, Object> colUnitPrice;
 
     @FXML
     private Label lblOrderId;
@@ -89,10 +89,10 @@ public class PlaceOrderFormController implements Initializable {
 
     ObservableList<CartTm> tmList = FXCollections.observableArrayList();
 
-    public void backButtonOnAction(ActionEvent actionEvent) {
+    public void backButtonOnAction(ActionEvent ignoredActionEvent) {
         Stage stage = (Stage) placeOrderPane.getScene().getWindow();
         try {
-            stage.setScene(new Scene(FXMLLoader.load(getClass().getResource("../view/DashBoard.fxml"))));
+            stage.setScene(new Scene(FXMLLoader.load(Objects.requireNonNull(getClass().getResource("../view/DashBoard.fxml")))));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -108,10 +108,10 @@ public class PlaceOrderFormController implements Initializable {
     }
 
     @FXML
-    void addToCartButtonOnAction(ActionEvent event) {
+    void addToCartButtonOnAction(ActionEvent ignoredEvent) {
         boolean isExist = false;
         for (CartTm tm:tmList) {
-            if (tm.getCode().equals(cmbItemCode.getValue().toString())){
+            if (tm.getCode().equals(cmbItemCode.getValue())){
                 tm.setQty(tm.getQty()+Integer.parseInt(txtQty.getText()));
                 tm.setAmount(tm.getQty()*tm.getAmount());
                 isExist = true;
@@ -126,7 +126,7 @@ public class PlaceOrderFormController implements Initializable {
 
 
             CartTm cartTm = new CartTm(
-                    cmbItemCode.getValue().toString(),
+                    cmbItemCode.getValue(),
                     txtDescription.getText(),
                     Double.parseDouble(lblUnitPrice.getText()),
                     Integer.parseInt(txtQty.getText()),
@@ -151,7 +151,7 @@ public class PlaceOrderFormController implements Initializable {
     }
 
     @FXML
-    void clearButtonOnAction(ActionEvent event) {
+    void clearButtonOnAction(ActionEvent ignoredEvent) {
         clearFields();
     }
 
@@ -168,7 +168,7 @@ public class PlaceOrderFormController implements Initializable {
     }
 
     @FXML
-    void placeOrderButtonOnAction(ActionEvent event) throws SQLException, ClassNotFoundException {
+    void placeOrderButtonOnAction(ActionEvent ignoredEvent) throws SQLException, ClassNotFoundException {
         List<OrderDetails> detailsList = new ArrayList<>();
 
         for (CartTm tm:tmList) {
@@ -183,7 +183,7 @@ public class PlaceOrderFormController implements Initializable {
         Order order = new Order(
                 lblOrderId.getText(),
                 LocalDate.now().toString(),
-                cmbCustomerId.getValue().toString()
+                cmbCustomerId.getValue()
         );
         try {
             DBConnection.getInstance().getConnection().setAutoCommit(false);
@@ -214,18 +214,18 @@ public class PlaceOrderFormController implements Initializable {
                 }
             }else{
                 isOrderPlaced = false;
-                new Alert(Alert.AlertType.ERROR,"Something went wrong..!").show();
+                new Alert(Alert.AlertType.ERROR,"Something went wrong!").show();
                 DBConnection.getInstance().getConnection().rollback();
             }
 
             if (isOrderPlaced){
-                new Alert(Alert.AlertType.INFORMATION,"Order Placed..!").show();
+                new Alert(Alert.AlertType.INFORMATION,"Order has been placed successfully!").show();
                 DBConnection.getInstance().getConnection().commit();
                 tmList.clear();
                 tblOrder.refresh();
                 clearFields();
             }else{
-                new Alert(Alert.AlertType.ERROR,"Something went wrong..!").show();
+                new Alert(Alert.AlertType.ERROR,"Something went wrong!").show();
                 DBConnection.getInstance().getConnection().rollback();
             }
         } catch (SQLException | ClassNotFoundException e) {
@@ -238,8 +238,32 @@ public class PlaceOrderFormController implements Initializable {
 
 
     @FXML
-    void updateButtonOnAction(ActionEvent event) {
+    void updateButtonOnAction(ActionEvent ignoredEvent) {
+        Order order = new Order(
+                lblOrderId.getText(),
+                LocalDate.now().toString(),
+                txtCustomerName.getText()
+        );
 
+        try {
+            boolean isUpdate = CrudUtil.execute(
+                    "UPDATE order SET date=? , customerId=? WHERE id=?",
+                    order.getId(),
+                    order.getDate(),
+                    order.getCustomerId()
+            );
+
+            if (isUpdate){
+                new Alert(Alert.AlertType.INFORMATION,"Item has been updated successfully!").show();
+                tblOrder.refresh();
+                clearFields();
+            }else{
+                new Alert(Alert.AlertType.ERROR,"Something went wrong!").show();
+            }
+
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -256,13 +280,9 @@ public class PlaceOrderFormController implements Initializable {
         loadCustomerId();
         loadItemCodes();
 
-        cmbCustomerId.setOnAction(actionEvent -> {
-            setCustomerName();
-        });
+        cmbCustomerId.setOnAction(actionEvent -> setCustomerName());
 
-        cmbItemCode.setOnAction(actionEvent -> {
-            setItemDetails();
-        });
+        cmbItemCode.setOnAction(actionEvent -> setItemDetails());
     }
 
     private void setItemDetails() {
@@ -270,7 +290,7 @@ public class PlaceOrderFormController implements Initializable {
 
             ResultSet resultSet = CrudUtil.execute(
                     "SELECT * FROM item WHERE code=?",
-                    cmbItemCode.getValue().toString()
+                    cmbItemCode.getValue()
             );
 
             if (resultSet.next()){
@@ -279,9 +299,7 @@ public class PlaceOrderFormController implements Initializable {
                 lblQtyOnHand.setText(resultSet.getString(4));
             }
 
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
@@ -291,16 +309,14 @@ public class PlaceOrderFormController implements Initializable {
 
             ResultSet resultSet = CrudUtil.execute(
                     "SELECT name FROM customer WHERE id=?",
-                    cmbCustomerId.getValue().toString()
+                    cmbCustomerId.getValue()
             );
 
             if (resultSet.next()){
                 txtCustomerName.setText(resultSet.getString(1));
             }
 
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
@@ -319,9 +335,7 @@ public class PlaceOrderFormController implements Initializable {
             }
 
             cmbItemCode.setItems(itemCodes);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
@@ -341,9 +355,7 @@ public class PlaceOrderFormController implements Initializable {
             }
 
             cmbCustomerId.setItems(customerIds);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
 
@@ -357,15 +369,13 @@ public class PlaceOrderFormController implements Initializable {
             );
 
             if (resultSet.next()){
-                int num = Integer.parseInt(resultSet.getString(1).split("[D]")[1]);
+                int num = Integer.parseInt(resultSet.getString(1).split("D")[1]);
                 num++;
                 lblOrderId.setText(String.format("D%03d",num));
             }else {
                 lblOrderId.setText("D001");
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }

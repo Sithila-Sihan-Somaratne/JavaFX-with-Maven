@@ -5,9 +5,6 @@ import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXTreeTableView;
 import com.jfoenix.controls.RecursiveTreeItem;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
-import db.DBConnection;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -18,7 +15,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TreeItemPropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Background;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import entity.Item;
@@ -27,32 +23,26 @@ import util.CrudUtil;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.ResourceBundle;
-import java.util.function.Predicate;
+import java.util.*;
 
 public class ItemFormController implements Initializable {
 
     @FXML
-    private TreeTableColumn colCode;
+    private TreeTableColumn<Object, Object> colCode;
 
     @FXML
-    private TreeTableColumn colDesc;
+    private TreeTableColumn<Object, Object> colDesc;
 
     @FXML
-    private TreeTableColumn colOption;
+    private TreeTableColumn<Object, Object> colOption;
 
     @FXML
-    private TreeTableColumn colQtyOnHand;
+    private TreeTableColumn<Object, Object> colQtyOnHand;
 
     @FXML
-    private TreeTableColumn colUnitPrice;
+    private TreeTableColumn<Object, Object> colUnitPrice;
 
     @FXML
     private AnchorPane itemPane;
@@ -75,10 +65,10 @@ public class ItemFormController implements Initializable {
     @FXML
     private JFXTextField txtUnitPrice;
 
-    public void backButtonOnAction(ActionEvent actionEvent) {
+    public void backButtonOnAction(ActionEvent ignoredActionEvent) {
         Stage stage = (Stage) itemPane.getScene().getWindow();
         try {
-            stage.setScene(new Scene(FXMLLoader.load(getClass().getResource("../view/DashBoard.fxml"))));
+            stage.setScene(new Scene(FXMLLoader.load(Objects.requireNonNull(getClass().getResource("../view/DashBoard.fxml")))));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -86,7 +76,7 @@ public class ItemFormController implements Initializable {
     }
 
     @FXML
-    void clearButtonOnAction(ActionEvent event) {
+    void clearButtonOnAction(ActionEvent ignoredEvent) {
         clearFields();
     }
 
@@ -100,7 +90,7 @@ public class ItemFormController implements Initializable {
     }
 
     @FXML
-    void saveButtonOnAction(ActionEvent event) {
+    void saveButtonOnAction(ActionEvent ignoredEvent) {
         Item item = new Item(
                 lblCode.getText(),
                 txtDesc.getText(),
@@ -119,15 +109,13 @@ public class ItemFormController implements Initializable {
             );
 
             if (isSaved) {
-                new Alert(Alert.AlertType.INFORMATION,"Item Saved..!").show();
+                new Alert(Alert.AlertType.INFORMATION,"Item has been saved successfully!").show();
                 loadTable();
                 clearFields();
             }else{
-                new Alert(Alert.AlertType.ERROR,"Something went wrong..!").show();
+                new Alert(Alert.AlertType.ERROR,"Something went wrong!").show();
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
@@ -166,11 +154,11 @@ public class ItemFormController implements Initializable {
                             );
 
                             if (isDeleted){
-                                new Alert(Alert.AlertType.INFORMATION,"Item Deleted..!").show();
+                                new Alert(Alert.AlertType.INFORMATION,"Item has been deleted successfully!").show();
                                 loadTable();
                                 generateId();
                             }else{
-                                new Alert(Alert.AlertType.ERROR,"Something went wrong..!").show();
+                                new Alert(Alert.AlertType.ERROR,"Something went wrong!").show();
                             }
                         }
                     } catch (SQLException | ClassNotFoundException e) {
@@ -191,9 +179,7 @@ public class ItemFormController implements Initializable {
             tblItem.setRoot(treeItem);
             tblItem.setShowRoot(false);
 
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
@@ -205,21 +191,19 @@ public class ItemFormController implements Initializable {
             );
 
             if (resultSet.next()){
-                int num = Integer.parseInt(resultSet.getString(1).split("[P]")[1]);
+                int num = Integer.parseInt(resultSet.getString(1).split("P")[1]);
                 num++;
                 lblCode.setText(String.format("P%03d",num));
             }else {
                 lblCode.setText("P001");
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
 
     @FXML
-    void updateButtonOnAction(ActionEvent event) {
+    void updateButtonOnAction(ActionEvent ignoredEvent) {
         Item item = new Item(
                 lblCode.getText(),
                 txtDesc.getText(),
@@ -237,16 +221,14 @@ public class ItemFormController implements Initializable {
             );
 
             if (isUpdate){
-                new Alert(Alert.AlertType.INFORMATION,"Item Updated..!").show();
+                new Alert(Alert.AlertType.INFORMATION,"Item has been updated successfully!").show();
                 clearFields();
                 loadTable();
             }else{
-                new Alert(Alert.AlertType.ERROR,"Something went wrong..!").show();
+                new Alert(Alert.AlertType.ERROR,"Something went wrong!").show();
             }
 
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
@@ -267,19 +249,8 @@ public class ItemFormController implements Initializable {
             }
         });
 
-        txtSearch.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observableValue, String oldValue, String newValue) {
-                tblItem.setPredicate(new Predicate<TreeItem<ItemTm>>() {
-                    @Override
-                    public boolean test(TreeItem<ItemTm> treeItem) {
-                        boolean flag = treeItem.getValue().getCode().contains(newValue) ||
-                                treeItem.getValue().getDescription().contains(newValue);
-                        return flag;
-                    }
-                });
-            }
-        });
+        txtSearch.textProperty().addListener((observableValue, oldValue, newValue) -> tblItem.setPredicate(treeItem -> treeItem.getValue().getCode().contains(newValue) ||
+                treeItem.getValue().getDescription().contains(newValue)));
 
     }
 

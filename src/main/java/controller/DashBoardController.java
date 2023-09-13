@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class DashBoardController implements Initializable {
@@ -29,11 +30,11 @@ public class DashBoardController implements Initializable {
     private Label lblTime;
 
     @FXML
-    void customerButtonOnAction(ActionEvent event) {
+    void customerButtonOnAction(ActionEvent ignoredEvent) {
         Stage stage = (Stage) dashboardPane.getScene().getWindow();
         try {
             stage.setResizable(false);
-            stage.setScene(new Scene(FXMLLoader.load(getClass().getResource("../view/CustomerForm.fxml"))));
+            stage.setScene(new Scene(FXMLLoader.load(Objects.requireNonNull(getClass().getResource("../view/CustomerForm.fxml")))));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -41,11 +42,11 @@ public class DashBoardController implements Initializable {
     }
 
     @FXML
-    void itemButtonOnAction(ActionEvent event) {
+    void itemButtonOnAction(ActionEvent ignoredEvent) {
         Stage stage = (Stage) dashboardPane.getScene().getWindow();
         try {
             stage.setResizable(false);
-            stage.setScene(new Scene(FXMLLoader.load(getClass().getResource("../view/ItemForm.fxml"))));
+            stage.setScene(new Scene(FXMLLoader.load(Objects.requireNonNull(getClass().getResource("../view/ItemForm.fxml")))));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -53,11 +54,11 @@ public class DashBoardController implements Initializable {
     }
 
     @FXML
-    void orderButtonOnAction(ActionEvent event) {
+    void orderButtonOnAction(ActionEvent ignoredEvent) {
         Stage stage = (Stage) dashboardPane.getScene().getWindow();
         try {
             stage.setResizable(false);
-            stage.setScene(new Scene(FXMLLoader.load(getClass().getResource("../view/OrderDetailsForm.fxml"))));
+            stage.setScene(new Scene(FXMLLoader.load(Objects.requireNonNull(getClass().getResource("../view/OrderDetailsForm.fxml")))));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -65,11 +66,11 @@ public class DashBoardController implements Initializable {
     }
 
     @FXML
-    void placeOrderButtonOnAction(ActionEvent event) {
+    void placeOrderButtonOnAction(ActionEvent ignoredEvent) {
         Stage stage = (Stage) dashboardPane.getScene().getWindow();
         try {
             stage.setResizable(false);
-            stage.setScene(new Scene(FXMLLoader.load(getClass().getResource("../view/PlaceOrderForm.fxml"))));
+            stage.setScene(new Scene(FXMLLoader.load(Objects.requireNonNull(getClass().getResource("../view/PlaceOrderForm.fxml")))));
         } catch (IOException e) {
             e.printStackTrace();
         }

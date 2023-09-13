@@ -15,7 +15,6 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
 import javafx.scene.control.cell.TreeItemPropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Background;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import entity.Order;
@@ -29,28 +28,29 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 public class OrderDetailsFormController {
 
     public JFXTreeTableView<OrderTm> tblOrder;
-    public TreeTableColumn colOrderId;
-    public TreeTableColumn colDate;
-    public TreeTableColumn colCustName;
-    public TreeTableColumn colOption;
+    public TreeTableColumn<Object, Object> colOrderId;
+    public TreeTableColumn<Object, Object> colDate;
+    public TreeTableColumn<Object, Object> colCustName;
+    public TreeTableColumn<Object, Object> colOption;
     public AnchorPane orderDetailsPane;
 
     public JFXTreeTableView<OrderDetailsTm> tblDetails;
-    public TreeTableColumn colItemCode;
-    public TreeTableColumn colDesc;
-    public TreeTableColumn colQty;
-    public TreeTableColumn colAmount;
+    public TreeTableColumn<Object, Object> colItemCode;
+    public TreeTableColumn<Object, Object> colDesc;
+    public TreeTableColumn<Object, Object> colQty;
+    public TreeTableColumn<Object, Object> colAmount;
 
 
-    public void backButtonOnAction(ActionEvent actionEvent) {
+    public void backButtonOnAction(ActionEvent ignoredActionEvent) {
         Stage stage = (Stage) orderDetailsPane.getScene().getWindow();
         try {
-            stage.setScene(new Scene(FXMLLoader.load(getClass().getResource("../view/DashBoard.fxml"))));
+            stage.setScene(new Scene(FXMLLoader.load(Objects.requireNonNull(getClass().getResource("../view/DashBoard.fxml")))));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -117,9 +117,7 @@ public class OrderDetailsFormController {
             tblDetails.setRoot(treeItem);
             tblDetails.setShowRoot(false);
 
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
@@ -158,10 +156,10 @@ public class OrderDetailsFormController {
                             );
 
                             if (isDeleted){
-                                new Alert(Alert.AlertType.INFORMATION,"Order Deleted..!").show();
+                                new Alert(Alert.AlertType.INFORMATION,"Order has been deleted!").show();
                                 loadOrders();
                             }else{
-                                new Alert(Alert.AlertType.ERROR,"Something went wrong..!").show();
+                                new Alert(Alert.AlertType.ERROR,"Something went wrong!").show();
                             }
                         }
                     } catch (SQLException | ClassNotFoundException e) {
@@ -188,9 +186,7 @@ public class OrderDetailsFormController {
             tblOrder.setRoot(treeItem);
             tblOrder.setShowRoot(false);
 
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }

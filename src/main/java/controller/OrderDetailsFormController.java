@@ -174,12 +174,14 @@ public class OrderDetailsFormController {
                         order.getCustomerId()
                 );
 
-                tmList.add(new OrderTm(
-                        order.getId(),
-                        order.getDate(),
-                        rst.getString(1),
-                        btn
-                ));
+                while (rst.next()){
+                    tmList.add(new OrderTm(
+                            order.getId(),
+                            order.getDate(),
+                            rst.getString(1),
+                            btn
+                    ));
+                }
             }
 
             TreeItem<OrderTm> treeItem = new RecursiveTreeItem<>(tmList, RecursiveTreeObject::getChildren);

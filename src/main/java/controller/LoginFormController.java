@@ -1,4 +1,4 @@
 package controller;
 
-public class LoginFormController {
+public interface LoginFormController {
 }

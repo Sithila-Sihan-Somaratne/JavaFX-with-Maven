@@ -121,7 +121,14 @@ public class OrderDetailsFormController {
             e.printStackTrace();
         }
     }
-
+    private void checkIfDeleted(boolean isDeleted) {
+        if (isDeleted){
+            new Alert(Alert.AlertType.INFORMATION,"Order has been deleted!").show();
+            loadOrders();
+        }else{
+            new Alert(Alert.AlertType.ERROR,"Something went wrong!").show();
+        }
+    }
     private void loadOrders() {
         ObservableList<OrderTm> tmList = FXCollections.observableArrayList();
         try {
@@ -154,13 +161,7 @@ public class OrderDetailsFormController {
                                     "DELETE FROM orders WHERE id=?",
                                     order.getId()
                             );
-
-                            if (isDeleted){
-                                new Alert(Alert.AlertType.INFORMATION,"Order has been deleted!").show();
-                                loadOrders();
-                            }else{
-                                new Alert(Alert.AlertType.ERROR,"Something went wrong!").show();
-                            }
+                            checkIfDeleted(isDeleted);
                         }
                     } catch (SQLException | ClassNotFoundException e) {
                         e.printStackTrace();

@@ -9,59 +9,65 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane fx:id="dashboardPane" prefHeight="539.0" prefWidth="761.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.DashBoardController">
-   <children>
-      <JFXButton layoutX="41.0" layoutY="102.0" onAction="#customerButtonOnAction" prefHeight="42.0" prefWidth="118.0" style="-fx-background-color: #00ff42;" text="Customers" textFill="WHITE">
-         <font>
-            <Font name="System Bold" size="18.0" />
-         </font>
-      </JFXButton>
-      <Label alignment="CENTER" prefHeight="67.0" prefWidth="761.0" style="-fx-background-color: #1a237e;" text="SuperMarket" textFill="WHITE" underline="true">
-         <font>
-            <Font name="System Bold" size="32.0" />
-         </font>
-      </Label>
-      <Separator layoutX="22.0" layoutY="492.0" prefHeight="5.0" prefWidth="717.0" style="-fx-background-color: #d9e3f0;" />
-      <JFXButton layoutX="41.0" layoutY="161.0" onAction="#itemButtonOnAction" prefHeight="42.0" prefWidth="118.0" style="-fx-background-color: #00ff42;" text="Items" textFill="WHITE">
-         <font>
-            <Font name="System Bold" size="18.0" />
-         </font>
-      </JFXButton>
-      <JFXButton layoutX="41.0" layoutY="227.0" onAction="#orderButtonOnAction" prefHeight="42.0" prefWidth="118.0" style="-fx-background-color: #00ff42;" text="Orders" textFill="WHITE">
-         <font>
-            <Font name="System Bold" size="18.0" />
-         </font>
-      </JFXButton>
-      <JFXButton layoutX="41.0" layoutY="368.0" onAction="#placeOrderButtonOnAction" prefHeight="60.0" prefWidth="141.0" style="-fx-background-color: #ea6b6b;" text="Place Order" textFill="WHITE">
-         <font>
-            <Font name="System Bold" size="18.0" />
-         </font>
-      </JFXButton>
-      <Label fx:id="lblTime" alignment="CENTER" layoutX="644.0" layoutY="4.0" prefHeight="60.0" prefWidth="110.0" text="00:00" textFill="WHITE">
-         <font>
-            <Font name="System Bold" size="25.0" />
-         </font>
-      </Label>
-      <Label fx:id="lblDate" alignment="CENTER" layoutX="533.0" layoutY="4.0" prefHeight="60.0" prefWidth="110.0" text="YYYY-MM-DD" textFill="WHITE">
-         <font>
-            <Font name="System Bold" size="12.0" />
-         </font>
-      </Label>
-      <Text layoutX="261.0" layoutY="521.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Copyright © 2023 - iCET All Rights Reserved" wrappingWidth="239.73681640625" />
-      <ImageView fitHeight="42.0" fitWidth="48.0" layoutX="17.0" layoutY="13.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../img/user.png" />
-         </image>
-      </ImageView>
-      <Label fx:id="lblDate1" layoutX="66.0" layoutY="22.0" prefHeight="23.0" prefWidth="110.0" text="iCET" textFill="WHITE">
-         <font>
-            <Font name="System Bold" size="12.0" />
-         </font>
-      </Label>
-<!--      <ImageView fitHeight="253.0" fitWidth="329.0" layoutX="336.0" layoutY="143.0" pickOnBounds="true" preserveRatio="true">-->
-<!--         <image>-->
-<!--            <Image url="@../resources/img/chart.png" />-->
-<!--         </image>-->
-<!--      </ImageView>-->
-   </children>
+<AnchorPane fx:id="dashboardPane" prefHeight="539.0" prefWidth="761.0" xmlns="http://javafx.com/javafx/19"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.DashBoardController">
+   <JFXButton layoutX="41.0" layoutY="102.0" onAction="#customerButtonOnAction" prefHeight="42.0" prefWidth="118.0"
+              style="-fx-background-color: #00ff42;" text="Customers" textFill="WHITE">
+      <font>
+         <Font name="System Bold" size="18.0"/>
+      </font>
+   </JFXButton>
+   <Label alignment="CENTER" prefHeight="67.0" prefWidth="761.0" style="-fx-background-color: #1a237e;"
+          text="SuperMarket" textFill="WHITE" underline="true">
+      <font>
+         <Font name="System Bold" size="32.0"/>
+      </font>
+   </Label>
+   <Separator layoutX="22.0" layoutY="492.0" prefHeight="5.0" prefWidth="717.0" style="-fx-background-color: #d9e3f0;"/>
+   <JFXButton layoutX="41.0" layoutY="161.0" onAction="#itemButtonOnAction" prefHeight="42.0" prefWidth="118.0"
+              style="-fx-background-color: #00ff42;" text="Items" textFill="WHITE">
+      <font>
+         <Font name="System Bold" size="18.0"/>
+      </font>
+   </JFXButton>
+   <JFXButton layoutX="41.0" layoutY="227.0" onAction="#orderButtonOnAction" prefHeight="42.0" prefWidth="118.0"
+              style="-fx-background-color: #00ff42;" text="Orders" textFill="WHITE">
+      <font>
+         <Font name="System Bold" size="18.0"/>
+      </font>
+   </JFXButton>
+   <JFXButton layoutX="41.0" layoutY="368.0" onAction="#placeOrderButtonOnAction" prefHeight="60.0" prefWidth="141.0"
+              style="-fx-background-color: #ea6b6b;" text="Place Order" textFill="WHITE">
+      <font>
+         <Font name="System Bold" size="18.0"/>
+      </font>
+   </JFXButton>
+   <Label fx:id="lblTime" alignment="CENTER" layoutX="644.0" layoutY="4.0" prefHeight="60.0" prefWidth="110.0"
+          text="00:00" textFill="WHITE">
+      <font>
+         <Font name="System Bold" size="25.0"/>
+      </font>
+   </Label>
+   <Label fx:id="lblDate" alignment="CENTER" layoutX="533.0" layoutY="4.0" prefHeight="60.0" prefWidth="110.0"
+          text="YYYY-MM-DD" textFill="WHITE">
+      <font>
+         <Font name="System Bold" size="12.0"/>
+      </font>
+   </Label>
+   <Text layoutX="261.0" layoutY="521.0" strokeType="OUTSIDE" strokeWidth="0.0"
+         text="Copyright © 2023 - iCET All Rights Reserved" wrappingWidth="239.73681640625"/>
+   <ImageView fitHeight="42.0" fitWidth="48.0" layoutX="17.0" layoutY="13.0" pickOnBounds="true" preserveRatio="true">
+      <Image url="@../img/user.png"/>
+   </ImageView>
+   <Label layoutX="66.0" layoutY="22.0" prefHeight="23.0" prefWidth="110.0" text="iCET"
+          textFill="WHITE">
+      <font>
+         <Font name="System Bold" size="12.0"/>
+      </font>
+   </Label>
+   <!--      <ImageView fitHeight="253.0" fitWidth="329.0" layoutX="336.0" layoutY="143.0" pickOnBounds="true" preserveRatio="true">-->
+   <!--         <image>-->
+   <!--            <Image url="@../resources/img/chart.png" />-->
+   <!--         </image>-->
+   <!--      </ImageView>-->
 </AnchorPane>

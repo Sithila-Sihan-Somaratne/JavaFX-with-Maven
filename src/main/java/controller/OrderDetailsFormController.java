@@ -1,6 +1,7 @@
 package controller;
 
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXTreeTableView;
 import com.jfoenix.controls.RecursiveTreeItem;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
@@ -45,6 +46,7 @@ public class OrderDetailsFormController {
     public TreeTableColumn<Object, Object> colDesc;
     public TreeTableColumn<Object, Object> colQty;
     public TreeTableColumn<Object, Object> colAmount;
+    public JFXTextField txtSearch;
 
 
     public void backButtonOnAction(ActionEvent ignoredActionEvent) {
@@ -75,6 +77,7 @@ public class OrderDetailsFormController {
                 loadDetails(newValue);
             }
         });
+        txtSearch.textProperty().addListener((observableValue, oldValue, newValue) -> tblOrder.setPredicate(orderTmTreeItem -> orderTmTreeItem.getValue().getId().contains(newValue)));
     }
 
     private void loadDetails(TreeItem<OrderTm> newValue) {

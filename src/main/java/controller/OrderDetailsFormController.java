@@ -77,7 +77,8 @@ public class OrderDetailsFormController {
                 loadDetails(newValue);
             }
         });
-        txtSearch.textProperty().addListener((observableValue, oldValue, newValue) -> tblOrder.setPredicate(orderTmTreeItem -> orderTmTreeItem.getValue().getId().contains(newValue)));
+        txtSearch.textProperty().addListener((observableValue, oldValue, newValue) -> tblOrder.setPredicate(orderTmTreeItem -> orderTmTreeItem.getValue().getId().contains(newValue)
+                || orderTmTreeItem.getValue().getCustName().contains(newValue)));
     }
 
     private void loadDetails(TreeItem<OrderTm> newValue) {

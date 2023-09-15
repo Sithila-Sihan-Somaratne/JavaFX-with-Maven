@@ -4,7 +4,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.Arrays;
+import java.util.Objects;
 
 /*
 * JDK 11
@@ -20,14 +20,7 @@ public class AppInitializer extends Application { //javafx.application  // alt+e
 
     @Override
     public void start(Stage stage) throws IOException {
-        Arrays.toString(new int[10]);
-        stage.setScene(new Scene(FXMLLoader.load(getClass().getResource("view/DashBoard.fxml"))));
-        /*
-        URL resource = getClass().getResource("view/DashBoard.fxml");
-        Parent load = FXMLLoader.load(resource);
-        Scene scene = new Scene(load);
-        stage.setScene(scene);
-        */
+        stage.setScene(new Scene(FXMLLoader.load(Objects.requireNonNull(getClass().getResource("view/DashBoard.fxml")))));
         stage.setResizable(false);
         stage.show();
         System.err.close();
